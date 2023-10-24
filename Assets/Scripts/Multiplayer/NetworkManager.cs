@@ -9,6 +9,25 @@ using TMPro;
 // https://www.youtube.com/watch?v=6kWNZOFcFQw
 public class NetworkManager : MonoBehaviour
 {
+    // Defining the message type transferring from client to server
+    public enum MessageType : ushort
+    {
+        // Changes the screen text to the clicked button text
+        ChangeText = 0,
+
+        // Shows accelerator value by moving the phone
+        AcceleratorValue = 1,
+
+        // Shows touch value by scrolling the finger on the screen
+        TouchValue = 2,
+
+        // Shows gyroscope value by moving the phone
+        GyroscopeValue = 3,
+
+        // Shows step counts by walking with the phone
+        PedometerValue = 4,
+    }
+
     // https://en.wikipedia.org/wiki/Singleton_pattern
     // Make this class singleton to guarantee there is only one instance which is
     // accessible by other classes
@@ -61,12 +80,46 @@ public class NetworkManager : MonoBehaviour
         Server.Stop();
     }
 
-    // There is only one message type here with ID equals to zero to change the text
-    [MessageHandler(0)]
-    private static void SetText(ushort clientId, Message message)
+    // Sets the value of the given text object
+    private static void SetValue(string textName, string value)
     {
         // https://gamedev.stackexchange.com/questions/132569/how-do-i-find-an-object-by-type-and-name-in-unity-using-c
         // Find the text object and change the text to received message
-        GameObject.Find("Text1").GetComponent<TMP_Text>().text = message.GetString();
+        GameObject.Find(textName).GetComponent<TMP_Text>().text = value;
+    }
+
+    // Handles the messages to set the text on server
+    [MessageHandler((ushort)MessageType.ChangeText)]
+    private static void SetText(ushort clientId, Message message)
+    {
+        SetValue("Text1", message.GetString());
+    }
+
+    // Handles the messages to show the accelerator value
+    [MessageHandler((ushort)MessageType.AcceleratorValue)]
+    private static void SetAcceleratorValue(ushort clientId, Message message)
+    {
+        SetValue("AcceleratorValue", message.GetString());
+    }
+
+    // Handles the messages to show the touch value
+    [MessageHandler((ushort)MessageType.TouchValue)]
+    private static void SetTouchValue(ushort clientId, Message message)
+    {
+        SetValue("TouchValue", message.GetString());
+    }
+
+    // Handles the messages to show the gyroscope value
+    [MessageHandler((ushort)MessageType.GyroscopeValue)]
+    private static void SetGyroscopeValue(ushort clientId, Message message)
+    {
+        SetValue("GyroscopeValue", message.GetString());
+    }
+
+    // Handles the messages to show the pedometer value
+    [MessageHandler((ushort)MessageType.PedometerValue)]
+    private static void SetPedometerValue(ushort clientId, Message message)
+    {
+        SetValue("PedometerValue", message.GetString());
     }
 }
