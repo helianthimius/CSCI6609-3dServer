@@ -1237,7 +1237,7 @@ GameObject:
   - component: {fileID: 1311649156}
   - component: {fileID: 1311649155}
   m_Layer: 5
-  m_Name: GyrosopeValue
+  m_Name: GyroscopeValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
